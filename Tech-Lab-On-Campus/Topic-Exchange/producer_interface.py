@@ -11,15 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pika,os,sys
+import os
+import pika,sys
 class mqProducerInterface:
     def __init__(self, exchange_name: str) -> None:
+        routing_key = sys.argv[1] if len(sys.argv) > 2 else 'anonymous.info'
+        self.routing_key = routing_key
         # Save parameters to class variables
         self.exchange_name = exchange_name
-        self.routing_key = sys.argv[1]
         self.ticker = sys.argv[2]
         self.price = sys.argv[3]
         self.sector = sys.argv[4]
+
         # Call setupRMQConnection
         self.setupRMQConnection()
 
@@ -31,16 +34,15 @@ class mqProducerInterface:
         # Establish Channel
         self.channel = self.connection.channel()
         # Create the exchange if not already present
-        self.exchange = self.channel.exchange_declare(exchange=self.exchange_name,exchange_type="topic")
+        self.exchange = self.channel.exchange_declare(rouuting_key = self.routing_key,exchange=self.exchange_name,exchange_type = "topic")
 
     def publishOrder(self, message: str) -> None:
-        # Basic Publish to Exchange
-        self.channel.basic_publish(
-        exchange=self.exchange_name,
-        routing_key=self.routing_key,
-        body=message
-        )
-        # Close Channel
-        self.channel.close()
-        self.connection.close()
-        # Close Connection
+        # Create Appropiate Topic String
+
+        # Send serialized message or String
+
+        # Print Confirmation
+
+        # Close channel and connection
+
+        pass

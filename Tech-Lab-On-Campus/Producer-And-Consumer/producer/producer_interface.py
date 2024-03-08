@@ -11,17 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pika,os,sys
+
+import pika
+import os
+
 class mqProducerInterface:
-    def __init__(self, exchange_name: str) -> None:
+    def __init__(self, routing_key: str, exchange_name: str) -> None:
         # Save parameters to class variables
+        self.routing_key = routing_key
         self.exchange_name = exchange_name
-        self.routing_key = sys.argv[1]
-        self.ticker = sys.argv[2]
-        self.price = sys.argv[3]
-        self.sector = sys.argv[4]
         # Call setupRMQConnection
         self.setupRMQConnection()
+        
 
     def setupRMQConnection(self) -> None:
         # Set-up Connection to RabbitMQ service
@@ -31,7 +32,7 @@ class mqProducerInterface:
         # Establish Channel
         self.channel = self.connection.channel()
         # Create the exchange if not already present
-        self.exchange = self.channel.exchange_declare(exchange=self.exchange_name,exchange_type="topic")
+        self.exchange = self.channel.exchange_declare(exchange=self.exchange_name)
 
     def publishOrder(self, message: str) -> None:
         # Basic Publish to Exchange
