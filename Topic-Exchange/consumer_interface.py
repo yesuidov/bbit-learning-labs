@@ -11,38 +11,45 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
-import pika,sys
-class mqProducerInterface:
+
+
+class mqConsumerInterface:
     def __init__(self, exchange_name: str) -> None:
-        routing_key = sys.argv[1] if len(sys.argv) > 2 else 'anonymous.info'
-        self.routing_key = routing_key
         # Save parameters to class variables
-        self.exchange_name = exchange_name
-        self.ticker = sys.argv[2]
-        self.price = sys.argv[3]
-        self.sector = sys.argv[4]
 
         # Call setupRMQConnection
-        self.setupRMQConnection()
+
+        pass
 
     def setupRMQConnection(self) -> None:
         # Set-up Connection to RabbitMQ service
-        con_params = pika.URLParameters(os.environ["AMQP_URL"])
-        self.connection = pika.BlockingConnection(parameters=con_params)
 
         # Establish Channel
-        self.channel = self.connection.channel()
+
         # Create the exchange if not already present
-        self.exchange = self.channel.exchange_declare(rouuting_key = self.routing_key,exchange=self.exchange_name,exchange_type = "topic")
 
-    def publishOrder(self, message: str) -> None:
-        # Create Appropiate Topic String
+        pass
 
-        # Send serialized message or String
+    def bindQueueToExchange(self, queueName: str, topic: str) -> None:
+        # Bind Binding Key to Queue on the exchange
 
-        # Print Confirmation
+        pass
 
-        # Close channel and connection
+    def createQueue(self, queueName: str) -> None:
+        # Create Queue if not already present
+
+        # Set-up Callback function for receiving messages
+
+        pass
+
+    def on_message_callback(self, channel, method_frame, header_frame, body):
+        # De-Serialize JSON message object if Stock Object Sent
+
+        # Acknowledge And Print Message
+
+        pass
+
+    def startConsuming(self) -> None:
+        # Start consuming messages
 
         pass
